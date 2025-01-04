@@ -155,7 +155,7 @@ extract_digitalocean_synchronize() {
 	local outdir="$1"
 	mkdir -p "${outdir}"
 	awk 'x {print} $0 == "### digitalocean-synchronize ###" {x=1}' "$0" | \
-		base64 -d | tar -xC "${outdir}"
+		base64 -d | tar -zxC "${outdir}"
 }
 
 parse_flags() {
