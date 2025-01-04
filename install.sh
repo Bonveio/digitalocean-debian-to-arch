@@ -259,7 +259,7 @@ sanity_checks() {
 	[ ${EUID} -eq 0 ] || fatal "Script must be run as root."
 	[ ${UID} -eq 0 ] || fatal "Script must be run as root."
 	[ -e /dev/vda ] || fatal "Script must be run on a KVM machine."
-	[[ "$(grep VERSION_CODENAME /etc/os-release | cut -d'=' -f2)" =~ ^(jessie|stretch|buster|bookworm|trixie)$ ]] \
+	[[ "$(grep VERSION_CODENAME /etc/os-release | cut -d'=' -f2)" =~ ^(jessie|stretch|buster|bookworm|trixie)$ ]] || \
 		fatal "This script only supports Debian 8.x/9.x."
 }
 
