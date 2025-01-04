@@ -269,6 +269,7 @@ prompt_for_destruction() {
 	log "Please backup all important data on this droplet before continuing."
 	log 'Type "wipe this droplet" to continue or anything else to cancel.'
 	local response
+ 	stty erase '^H' ## fix backspace
 	read -p '> ' response
 	if [ "${response}" = "wipe this droplet" ]; then
 		return 0
