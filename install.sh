@@ -119,6 +119,7 @@ host_packages=(
 	haveged
 	parted
 	psmisc
+ 	zstd
 )
 
 arch_packages=(
@@ -258,7 +259,7 @@ sanity_checks() {
 	[ ${EUID} -eq 0 ] || fatal "Script must be run as root."
 	[ ${UID} -eq 0 ] || fatal "Script must be run as root."
 	[ -e /dev/vda ] || fatal "Script must be run on a KVM machine."
-	[[ "$(cat /etc/debian_version)" =~ ^([89]|10).+$ ]] || \
+	[[ "$(grep VERSION_CODENAME /etc/os-release | cut -d'=' -f2)" =~ ^(jessie|stretch|buster|bookworm|trixie)$ ]] \
 		fatal "This script only supports Debian 8.x/9.x."
 }
 
@@ -407,16 +408,16 @@ stage1_install() {
 
 	log "Downloading bootstrap tarball ..."
 	set -- $(wget -qO- ${archlinux_mirror}/iso/latest/sha256sums.txt |
-		grep "archlinux-bootstrap-[^-]*-${target_architecture}.tar.gz")
+		grep "archlinux-bootstrap-[^-]*-${target_architecture}.tar.zst")
 	local expected_sha256=$1
 	local bootstrap_filename=$2
 	download_and_verify \
 		${archlinux_mirror}/iso/latest/${bootstrap_filename} \
-		/d2a/bootstrap.tar.gz \
+		/d2a/bootstrap.tar.zst \
 		${expected_sha256}
 
 	log "Extracting bootstrap tarball ..."
-	tar -xzf /d2a/bootstrap.tar.gz \
+	tar -xf /d2a/bootstrap.tar.zst \
 		--directory=/d2a/work/archroot \
 		--strip-components=1
 
